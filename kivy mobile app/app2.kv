@@ -1,0 +1,559 @@
+#: import ew kivy.uix.effectwidget
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+<ScreenManager>:
+    WelcomeScreen:
+        name: "welcome-screen"
+    Sounds:
+        name: "first-screen"
+    MusicScreen:
+        name: "second-screen"
+    SongDetailsScreen:
+        name: "third-screen"
+
+
+#<Content>:
+#    ScrollView:
+#        MDList:
+#            OneLineListItem:
+#                text: "Home"
+#            OneLineListItem:
+#                text: "Music Player"
+#            OneLineListItem:
+#                text: "Song Details"
+
+<Sounds>:
+    id: first_screen
+    img: img
+    home_btn: home_btn
+    mp_btn: mp_btn
+    details_btn: details_btn
+
+    FitImage:
+        id: img
+        source: 'D:\\kivy mobile app\\images\\white.jpg'
+        allow_stretch: False
+        anim_delay: 0.7
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Image:
+            id: img
+            source: 'D:\\kivy mobile app\\images\\mic2.gif'
+            allow_stretch: True
+            anim_delay: 1
+            anim_reset: True
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        MDLabel:
+            id: my_label
+            text: 'Turn ON your mic for listening ...'
+            source: 'D:\\kivy mobile app\\images\\loader.gif'
+            halign: 'center'
+            font_style: 'H5'
+            font_name: 'BadScript'
+            theme_text_color: 'Custom'
+            #text_color: (255/255.0, 0/255.0, 0/255.0, 1)
+            text_color: (0, 0, 0, 1)
+            #LoaderImage:
+                #source: 'D:\kivy mobile app\images\sounds.jpg'
+                #size_hint: None, None
+                #size: "200dp", "200dp"
+
+
+#    EffectWidget:
+#        effects: [ew.VerticalBlurEffect(size=1), ew.HorizontalBlurEffect(size=1)]
+#        FitImage:
+#            id: cov_img
+#            source: 'listen.gif'
+#            allow_stretch: True
+#            anim_delay: 0.05
+#            #anim_reset: True
+    BoxLayout:
+        orientation: "vertical"
+        #size: root.width, root.height
+        MDToolbar:
+            pos_hint: {"top":1}
+            title: ''
+            left_action_items: [["menu", lambda x: nav_drawer.set_state('toggle')]]
+            #right_action_items: [["clock", lambda x: app.callback()]]
+            font_name: 'VastShadow'
+            elevation:10
+
+#        MDLabel:
+#            id: my_label
+#            text: 'Turn ON your mic for listening ...'
+#            source: 'D:\\kivy mobile app\\images\\loader.gif'
+#            halign: 'center'
+#            font_style: 'H5'
+#            font_name: 'BadScript'
+#            theme_text_color: 'Custom'
+#            #text_color: (255/255.0, 0/255.0, 0/255.0, 1)
+#            text_color: (0, 0, 0, 1)
+#            #LoaderImage:
+#                #source: 'D:\kivy mobile app\images\sounds.jpg'
+#                #size_hint: None, None
+#                #size: "200dp", "200dp"
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            opening_transition: 'out_bounce'
+            opening_time: 1
+            closing_transition: 'in_out_elastic'
+            closing_time: 1
+            close_on_click: True
+            status:'closed'
+            state: 'close'
+            BoxLayout:
+                orientation: 'vertical'
+                MDRectangleFlatButton:
+                    id: home_btn
+                    icon: 'android'
+                    size_hint_x: 1
+                    text: "Home"
+                    text_color: 1,1,0,1
+                    disabled: False
+                    disabled_outline_color: 1,1,0,1
+
+                MDRectangleFlatButton:
+                    id: mp_btn
+                    icon: 'music'
+                    size_hint_x: 1
+                    text: "Music Player"
+                    text_color: (106/255, 90/255, 205/255, 1)
+                    disabled: True
+                    disabled_outline_color: 1,1,0,1
+                    on_press: root.manager.current = 'second-screen'
+                MDRectangleFlatButton:
+                    id: details_btn
+                    icon: 'android'
+                    size_hint_x: 1
+                    text: "Details"
+                    text_color: (106/255, 90/255, 205/255, 1)
+                    disabled: True
+                    background_disabled_vertical: 1,1,0,1
+                    on_press: root.manager.current = 'third-screen'
+                Widget:
+
+#        MDRectangleFlatButton:
+#            text: "Press"
+#            pos_hint: {'center_x': 0.5, 'center_y':0.5}
+#            on_press: root.manager.current = 'second-screen'
+
+
+
+        MDBottomAppBar:
+            MDToolbar:
+                id: my_md
+                #left_action_items: [["coffee", lambda x: app.navigation_draw()]]
+
+                mode: 'center'
+                type: 'bottom'
+                icon: 'microphone-off'
+                on_action_button: root.test()
+                #on_action_button: root.release()
+
+<MusicScreen>:
+    song_name: song_name
+    artist_name: artist_name
+    img: img
+    cov_img: cov_img
+    rot_img: rot_img
+    play_pause: play_pause
+    progr: progress
+    EffectWidget:
+        effects: [ew.VerticalBlurEffect(size=10), ew.HorizontalBlurEffect(size=10)]
+        FitImage:
+            id: cov_img
+            source: 'D:\\kivy mobile app\\images\\test.jpg'
+            allow_stretch: True
+            anim_delay: 0.05
+            #anim_reset: True
+    Image:
+        id: img
+        source: 'D:\\kivy mobile app\\images\\transparent.png'
+        allow_stretch: False
+        anim_delay: 0.1
+        #anim_reset: True
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: ['10dp', '30dp', '10dp', '50dp']
+        SongCover:
+            id: sc
+            screen_mng: root.manager
+            play_pause: play_pause
+            progr: progress
+            song_name: song_name
+            artist_name: artist_name
+            img: img
+            rot_img: rot_img
+            size: (250, 250)
+            size_hint: None, None
+            pos_hint: {'center_x': .5}
+            RotatingImage:
+                id: rot_img
+                angle: sc.angle
+                source: 'D:\\kivy mobile app\\images\\test.jpg'
+                #allow_stretch: True
+                #anim_delay: 0
+                radius: [250, ]
+        Widget:
+            size_hint: None, None
+            height: '25dp'
+        Label:
+            id: song_name
+            text: 'Song Name'
+            bold: True
+            font_size: '30sp'
+            font_name: 'Flavors'
+            text_color: (1, 0, 0, 1)
+            size_hint_y: None
+            height: self.texture_size[1]
+        Label:
+            id: artist_name
+            text: 'Artist Name'
+            bold: True
+            font_size: '18sp'
+            size_hint_y: None
+            font_name: 'BadScript'
+            height: self.texture_size[1]
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            Slider:
+                id: progress
+                color: [.7, 0, 0, 1]
+                min: 0
+                max: 100
+                value: 0
+                background_width: '20dp'
+                cursor_image: ''
+                cursor_size: ('10dp', '10dp')
+                value_track_color: [1,0,0,1]
+                value_track: True
+
+            MDBoxLayout:
+                AnchorLayout:
+                    size_hint_y: 1
+                    MyIcon:
+                        icon: 'arrow-left'
+                        on_press: root.manager.current = 'first-screen'
+                AnchorLayout:
+                    size_hint_y: 1
+                    MyIcon:
+                        id: play_pause
+                        icon: 'play-outline'
+                        on_press: sc.play_music(progress)
+                AnchorLayout:
+                    size_hint_y: 1
+                    MyIcon:
+                        icon: 'stop'
+                        on_press: sc.stop_music(progress)
+                AnchorLayout:
+                    size_hint_y: 1
+                    MyIcon:
+                        icon: 'format-list-bulleted'
+                        on_press: root.manager.current = 'third-screen'
+
+
+
+
+
+<SongDetailsScreen>:
+    tabs: tabs
+    year: year
+    duration: duration
+    bmp: bmp
+    energy: energy
+    danceability: danceability
+    popularity: popularity
+    song: song
+    song_miniplayer: song_miniplayer
+    #progress_details: progress_details
+    my_lyrics: my_lyrics
+    det_img: det_img
+    play_details: play_details
+    EffectWidget:
+        effects: [ew.VerticalBlurEffect(size=10), ew.HorizontalBlurEffect(size=10)]
+        FitImage:
+            id: det_img
+            source: 'D:\\kivy mobile app\\images\\blue-cover.jpg'
+            allow_stretch: True
+            anim_delay: 0.05
+            #anim_reset: True
+
+
+
+    MDBoxLayout:
+        orientation: "vertical"
+        MDBoxLayout:
+            size_hint_y: .15
+            padding: dp(15)
+            MDBoxLayout:
+                orientation: "vertical"
+                MDLabel:
+                    id: song
+                    text: "Artist - Song Name"
+                    font_style: "H6"
+        MDTabs:
+            id: tabs
+            Tab:
+                title: "Details"
+                DetailsScreen:
+                    id: ds
+                    screen_mng: root.manager
+                    year: year
+                    duration: duration
+                    bmp: bmp
+                    energy: energy
+                    danceability: danceability
+                    popularity: popularity
+                    progress_details: progress_details
+                    play_details: play_details
+                    song_miniplayer: song_miniplayer
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        MDGridLayout:
+                            size_hint_y: .75
+                            cols: 2
+                            padding: dp(15)
+                            spacing: dp(15)
+                            text_color: (1, 1, 1, 1)
+                            ElementCard:
+                                id: year
+                                image: "D:\\kivy mobile app\\images\\calendar-icon.png"
+                                text: 'Year'
+                                subtext: '2022'
+                            ElementCard:
+                                id: duration
+                                image: "D:\\kivy mobile app\\images\\duration.png"
+                                text: 'Duration'
+                                subtext: '2022'
+                            ElementCard:
+                                id: bmp
+                                image: "D:\\kivy mobile app\\images\\BPM.png"
+                                text: 'BPM'
+                                subtext: '2022'
+                            ElementCard:
+                                id: energy
+                                image: "D:\\kivy mobile app\\images\\Energy.png"
+                                text: 'Energy'
+                                subtext: '2022'
+                            ElementCard:
+                                id: danceability
+                                image: "D:\\kivy mobile app\\images\\Danceability.jpg"
+                                text: 'Danceability'
+                                subtext: '2022'
+                            ElementCard:
+                                id: popularity
+                                image: "D:\\kivy mobile app\\images\\Popularity.png"
+                                text: 'Popularity'
+                                subtext: '2022'
+            Tab:
+                title: "Lyrics"
+                DetailsScreen:
+                    my_lyrics: my_lyrics
+                    progr_details: progress_details
+                    ScrollView:
+                        MDLabel:
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            id: my_lyrics
+                            text: 'Lyrics'
+                            halign: 'center'
+                            #font_style: 'H6'
+                            text_size: self.width, None
+
+                            theme_text_color: 'Custom'
+                            #text_color: (255/255.0, 0/255.0, 0/255.0, 1)
+                            text_color: (106/255, 90/255, 205/255, 1)
+
+            Tab:
+                title: "Genre"
+
+            Tab:
+                title: "Home"
+
+
+    FloatLayout:
+        size_hint_y: None
+        height: '50dp'
+        AnchorLayout:
+            padding: ('5dp', '5dp', '5dp', '5dp')
+            size_hint_y: None
+            size: '70dp','60dp'
+            pos: (0,0)
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    canvas:
+                        Color:
+                            rgba:(*get_color_from_hex('#3f3f3f')[0:-1], 0.9)
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(5), dp(5), dp(5), dp(5)]
+                    BoxLayout:
+                        size_hint_x: None
+                        width: '90dp'
+                        RoundedImage:
+                            source: 'D:\\kivy mobile app\\images\\2.jpg'
+                    Label:
+                        id: song_miniplayer
+                        text: '[b]Artist[/b]\nSong Name'
+#                        Label:
+#                            text: 'Song Name'
+                        markup: True
+                        size_hint_x: None
+                        width: '70dp'
+
+                    Widget:
+                    MDBoxLayout:
+                        AnchorLayout:
+                            MyIcon:
+                                id: play_details
+                                icon: 'play-outline'
+                                on_press: ds.play_music_from_details_screen(progress_details)
+                        AnchorLayout:
+                            MyIcon:
+                                icon: 'music'
+                                on_press: root.manager.current = 'second-screen'
+                        AnchorLayout:
+                            MyIcon:
+                                icon: 'close'
+
+                    Widget:
+                MDBoxLayout:
+                    Slider:
+                        id: progress_details
+                        color: [.7, 0, 0, 1]
+                        min: 0
+                        max: 100
+                        value: 0
+                        background_width: '20dp'
+                        cursor_image: ''
+                        cursor_size: ('10dp', '10dp')
+                        value_track_color: [1,0,0,1]
+                        value_track: True
+
+
+<WelcomeScreen>:
+    # Start the progress bar animation when the screen is active
+    on_enter: self.ids.progress.start()
+    MDBoxLayout:
+        # Add float layout
+        MDFloatLayout:
+            # Add Gif image
+            Image:
+                source:'D:\\kivy mobile app\\images\\welcome-screen.gif'
+                allow_stretch: True
+                anim_delay: 0.11
+                # anim_loop: 1
+                anim_reset: True
+
+            # Add box layout
+            BoxLayout:
+                # Set box position
+                pos_hint:{'center_y':.3, 'center_x':.5}
+                padding: "10dp"
+                # set width to 70%
+                size_hint_x: .7
+
+                # Add progress bar
+                MDProgressBar:
+                    # Set progress id
+                    id: progress
+                    # Set orientation
+                    orientation: "horizontal"
+                    # Set progress type
+                    type: "indeterminate"
+                    # Progress duration
+                    running_duration: 1
+                    # Catching duration
+                    catching_duration: 1
+
+
+
+
+<Tab>:
+    MDLabel:
+        id: label
+
+
+
+<ElementCard@MDCard>:
+    md_bg_color: 255/255,255/255,255/255,1
+    #size_hint_y: None
+    padding: dp(15)
+    #spacing: dp(15)
+    radius: dp(15)
+    image: ''
+    text: ""
+    subtext: ''
+    height: dp(175)
+    orientation: 'vertical'
+    Image:
+        source: root.image
+        size_hint_y: 1
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDLabel:
+            halign: "center"
+            text: root.text
+            text_color: (1, 1, 1, 1)
+        MDLabel:
+            halign: "center"
+            font_style: "Subtitle2"
+            text: root.subtext
+            text_color: (1, 1, 1, 1)
+
+
+<MyIcon@MDIconButton>:
+    color: [.7, 0, 0, 1]
+    size_hint: None, None
+    user_font_size: '20sp'
+    theme_text_color: 'Custom'
+    size: ('20dp', '20dp')
+    text_color: [1,1,1,1]
+
+
+<RotatingImage@FitImage>:
+    angle: 0
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: root.angle
+            origin: self.center
+    canvas.after:
+        PopMatrix
+
+<Icon@AnchorLayout>:
+    anchor_y: 'center'
+    anchor_x: 'center'
+    img:''
+    icon_size: '30dp', '30dp'
+    color:[1, 1, 1, 1]
+    BoxLayout:
+        padding: ('5dp', '5dp', '5dp', '5dp')
+        size_hint:None, None
+        size:root.icon_size
+        Image:
+            source:root.img
+            allow_stretch:True
+            keep_ratio:False
+            mipmap:True
+            color:root.color
+
+<RoundedImage>:
+    source: ''
+    texture: None
+    canvas:
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(5), 0, 0, dp(5)]
+            texture: root.texture
+    size_hint_x: None
+    width: '70dp'
+
