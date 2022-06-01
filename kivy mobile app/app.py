@@ -27,6 +27,7 @@ from lyricsgenius.api.public_methods import SearchMethods
 from lyricsgenius.types import Song
 from termcolor import colored
 
+
 import libs.fingerprint as fingerprint
 from libs.config import get_config
 from libs.db_sqlite import SqliteDatabase, SQLITE_MAX_VARIABLE_NUMBER
@@ -124,7 +125,6 @@ genius = MyGenius(token)
 genius.remove_section_headers = True  # Remove section headers (e.g. [Chorus]) from lyrics when searching
 # genius.excluded_terms = ["(Remix)", "(Live)",
 #                          "Today’s Top Hits 9/11/20"]  # Exclude songs with these words in their title
-
 
 class LoaderImage(AsyncImage):
     Loader.loading_image = 'D:\\kivy mobile app\\images\\loader.gif'
@@ -224,25 +224,6 @@ class Sounds(MDScreen):
         super().__init__(**kw)
         self.thread = None
 
-    def apasa(self):
-        self.ids.img.source = 'listen.gif'
-       # self.ids.my_md.on_action_button = main()
-
-    def release(self):
-        self.ids.my_label.text = "Tap the mic for listening ..."
-        if self.ids.my_md.icon == 'microphone-off':
-            self.ids.my_md.icon = 'microphone'
-        else:
-            self.ids.my_md.icon = 'microphone-off'
-
-    def msg(self):
-        if self.ids.my_md.icon == 'microphone-off':
-            self.ids.my_md.icon = 'microphone'
-            self.ids.my_label.text = "Listening ..."
-            return self.main
-        else:
-            self.ids.my_md.icon = 'microphone-off'
-            self.ids.my_label.text = "Tap the mic for listening ..."
 
     def test(self):
         self.thread = threading.Thread(target=self.main).start()
@@ -256,25 +237,16 @@ class Sounds(MDScreen):
     def main(self):
         self.test2()
         if self.ids.my_md.icon == 'microphone-off':
-            #self.ids.img.source = 'listen.gif'
             self.ids.my_md.icon = 'microphone'
-            #db = SqliteDatabase()
 
             msg = ' * started recording..'
             print(msg)
             config = get_config()
-            # parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
-            # parser.add_argument('-s', '--seconds', nargs='?')
-            # args = parser.parse_args()
-
-            # if not args.seconds:
-            #    parser.print_help()
-            #    sys.exit(0)
 
             seconds = 5
 
             chunksize = 2 ** 12  # 4096
-            channels = 2  # int(config['channels']) # 1=mono, 2=stereo
+            channels = 2  # 1=mono, 2=stereo
 
             record_forever = False
             visualise_console = bool(config['mic.visualise_console'])
@@ -364,15 +336,6 @@ class Sounds(MDScreen):
                     y = x[1].split('.wav')
                     sn = y[0]
                     print(sn)
-                    # self.ids.my_label.text = song['SONG_NAME']
-                    # print(sn)
-                    # print(dict_songs[sn]['artist'])
-                    # print(self.ids.my_label.text)
-
-                    # print(ScreenManager().screen_names)
-                    # ScreenManager().get_screen('second-screen').ids.song_name.text = song['SONG_NAME']
-                    # self.ids.my_label.font_name = 'Flavors'
-                    # self.ids.my_label.text_color = '#ffdc00'
 
                     song = genius.search_song(sn, dict_songs[sn]['artist'], get_full_info=False)
                     if not song:
@@ -381,6 +344,8 @@ class Sounds(MDScreen):
                         lyrics = song.lyrics
 
                     print(song.song_art_image_url)
+
+
                     # print(sn)
                     # print(dict_songs[sn])
 
@@ -396,7 +361,7 @@ class Sounds(MDScreen):
                     self.manager.get_screen('third-screen').popularity.subtext = dict_songs[sn]['popularity'] + "%"
                     self.manager.get_screen('third-screen').song.text = dict_songs[sn]['artist'] + " - " + sn
                     self.manager.get_screen('third-screen').my_lyrics.text = lyrics
-                    self.manager.get_screen('third-screen').song_miniplayer.text = '[b]' + dict_songs[sn]['artist'] + '[/b]' + '\n' + sn
+                    #self.manager.get_screen('third-screen').song_miniplayer.text = '[b]' + dict_songs[sn]['artist'] + '[/b]' + '\n' + sn
 
                     music = SoundLoader.load(
                         'D:\\kivy mobile app\\wav\\' + dict_songs[sn]['artist'] + ' - ' + sn + '.wav')
@@ -411,7 +376,7 @@ class Sounds(MDScreen):
                     self.ids.my_label.text = dict_songs[sn]['artist'] + '-' + sn
                     self.ids.mp_btn.disabled = False
                     self.ids.details_btn.disabled = False
-                    self.ids.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
+                    self.ids.img.source = ''
                     #self.ids.img.anim_delay = 0.7
                     self.manager.current = 'second-screen'
 
@@ -422,17 +387,19 @@ class Sounds(MDScreen):
                     self.ids.my_md.icon = 'microphone-off'
                     self.ids.mp_btn.disabled = True
                     self.ids.details_btn.disabled = True
-                    self.ids.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
+                    self.ids.img.source = ''
                     #self.ids.img.anim_delay = 0.7
             else:
                 self.ids.my_label.text = 'Song not found!\n Please try again.'
-                self.ids.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
+                self.ids.img.source = ''
                 #self.ids.img.anim_delay = 0.7
+                self.ids.mp_btn.disabled = True
+                self.ids.details_btn.disabled = True
 
             self.ids.my_md.icon = 'microphone-off'
             #self.ids.my_label.text = "Tap the button for listening ..."
             #self.ids.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
-            self.ids.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
+            #self.ids.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
             #self.ids.img.anim_delay = 0.7
             #if self.thread:
 
@@ -451,63 +418,63 @@ class WelcomeScreen(MDScreen):
         super().__init__(**kwargs)
         # Delay time for splash screen before transitioning to main screen
         Clock.schedule_once(self.change_screen, 10)  # Delay for 10 seconds
-    ########################################################################
-    ## This function changes the current screen to main screen
-    ########################################################################
+
     def change_screen(self, dt):
         self.manager.current = "first-screen"
 
+
 class DetailsScreen(MDBoxLayout):
-    music = SoundLoader.load('D:\\kivy mobile app\\wav\\Imagine Dragons - Believer.wav')
-    progress = Animation(value=music.length, d=music.length, t='linear')
-    #pygame.init()
-    #pygame.mixer.init()
-    playing_state = False
-    is_playing = False
-    def play_music_from_details_screen(self, widget):
-        self.widget = widget
-        self.progress.start(widget)
-        txt = self.song_miniplayer.text
-        x = txt.split("\n")
-        sn = x[1]
-        a1 = x[0].split("[b]")
-        an = a1[1].split("[/b]")
-        if self.play_details.icon == 'play-outline' and self.is_playing == False:
-            music = SoundLoader.load(
-                'D:\\kivy mobile app\\wav\\' + an[0] + ' - ' + sn + '.wav')
-            pygame.mixer.music.load(
-                'D:\\kivy mobile app\\wav\\' + an[0] + ' - ' + sn + '.wav')
-            self.progress = Animation(value=music.length, d=music.length, t='linear')
-            pygame.mixer.music.play()
-            self.is_playing = True
-            self.play_details.icon = 'pause'
-            self.progress_details.max = self.screen_mng.get_screen('second-screen').progr.max
-            self.progress_details.min = self.screen_mng.get_screen('second-screen').progr.min
-            #self.screen_mng.get_screen('second-screen').progress = self.progress
-            self.screen_mng.get_screen('second-screen').play_pause.icon = self.play_details.icon
-            #print(self.screen_mng.get_screen('second-screen').play_pause.icon)
-
-            self.progress.start(widget)
-            #self.anim.start(self)
-
-            # self.rotate()
-        elif self.play_details.icon == 'pause' and not self.playing_state:
-            pygame.mixer.music.pause()
-            self.play_details.icon = 'play-outline'
-            #self.screen_mng.get_screen('second-screen').progress = self.progress
-            self.screen_mng.get_screen('second-screen').play_pause.icon = self.play_details.icon
-            self.playing_state = True
-            self.progress.stop(widget)
-            #self.anim.stop(self)
-        else:
-            pygame.mixer.music.unpause()
-            self.play_details.icon = 'pause'
-            #self.screen_mng.get_screen('second-screen').progress = self.progress
-            self.screen_mng.get_screen('second-screen').play_pause.icon = self.play_details.icon
-            self.playing_state = False
-            self.progress.start(widget)
-            #self.anim.start(self)
-            # self.rotate()
+      pass
+#     music = SoundLoader.load('D:\\kivy mobile app\\wav\\Imagine Dragons - Believer.wav')
+#     progress = Animation(value=music.length, d=music.length, t='linear')
+#     #pygame.init()
+#     #pygame.mixer.init()
+#     playing_state = False
+#     is_playing = False
+#     def play_music_from_details_screen(self, widget):
+#         self.widget = widget
+#         self.progress.start(widget)
+#         txt = self.song_miniplayer.text
+#         x = txt.split("\n")
+#         sn = x[1]
+#         a1 = x[0].split("[b]")
+#         an = a1[1].split("[/b]")
+#         if self.play_details.icon == 'play-outline' and self.is_playing == False:
+#             music = SoundLoader.load(
+#                 'D:\\kivy mobile app\\wav\\' + an[0] + ' - ' + sn + '.wav')
+#             pygame.mixer.music.load(
+#                 'D:\\kivy mobile app\\wav\\' + an[0] + ' - ' + sn + '.wav')
+#             self.progress = Animation(value=music.length, d=music.length, t='linear')
+#             pygame.mixer.music.play()
+#             self.is_playing = True
+#             self.play_details.icon = 'pause'
+#             self.progress_details.max = self.screen_mng.get_screen('second-screen').progr.max
+#             self.progress_details.min = self.screen_mng.get_screen('second-screen').progr.min
+#             #self.screen_mng.get_screen('second-screen').progress = self.progress
+#             self.screen_mng.get_screen('second-screen').play_pause.icon = self.play_details.icon
+#             #print(self.screen_mng.get_screen('second-screen').play_pause.icon)
+#
+#             self.progress.start(widget)
+#             #self.anim.start(self)
+#
+#             # self.rotate()
+#         elif self.play_details.icon == 'pause' and not self.playing_state:
+#             pygame.mixer.music.pause()
+#             self.play_details.icon = 'play-outline'
+#             #self.screen_mng.get_screen('second-screen').progress = self.progress
+#             self.screen_mng.get_screen('second-screen').play_pause.icon = self.play_details.icon
+#             self.playing_state = True
+#             self.progress.stop(widget)
+#             #self.anim.stop(self)
+#         else:
+#             pygame.mixer.music.unpause()
+#             self.play_details.icon = 'pause'
+#             #self.screen_mng.get_screen('second-screen').progress = self.progress
+#             self.screen_mng.get_screen('second-screen').play_pause.icon = self.play_details.icon
+#             self.playing_state = False
+#             self.progress.start(widget)
+#             #self.anim.start(self)
+#             # self.rotate()
 
 class SongDetailsScreen(Screen):
     def on_tab_switch(self, instance_tabs, instance_tab, instance_tab_label, tab_text):
@@ -529,7 +496,6 @@ class RoundedImage(Widget):
 
 class SongCover(MDBoxLayout):
     music = SoundLoader.load('D:\\kivy mobile app\\wav\\Imagine Dragons - Believer.wav')
-    #print(music.length)
     angle = NumericProperty()
     anim = Animation(angle=-360, d=3, t='linear')
     anim += Animation(angle=0, d=0, t='linear')
@@ -541,25 +507,17 @@ class SongCover(MDBoxLayout):
     is_playing = False
 
     def rotate(self):
-        # print(self.song_name.text)
-        # print(ScreenManager().get_screen('second-screen').song_name.text)
         if self.anim.have_properties_to_animate(self):
             self.anim.stop(self.widget)
-            # self.progress.stop(self.widget)
         else:
             self.anim.start(self)
-            # self.progress.start(self.widget)
 
     def play_music(self, widget):
         self.widget = widget
         self.progress.start(widget)
-        if (self.screen_mng.get_screen('third-screen').play_details.icon == 'play-outline'):
-            playing_state = False
-            is_playing = False
-        else:
-            is_playing = True
+
         self.img.source = 'D:\\kivy mobile app\\images\\giphy.gif'
-        if self.play_pause.icon == 'play-outline' and self.is_playing == False:
+        if self.is_playing == False:
             music = SoundLoader.load(
                 'D:\\kivy mobile app\\wav\\' + self.artist_name.text + ' - ' + self.song_name.text + '.wav')
             pygame.mixer.music.load(
@@ -572,31 +530,19 @@ class SongCover(MDBoxLayout):
             self.progr.min = 0
             self.progress.start(widget)
             self.anim.start(self)
-            #self.screen_mng.get_screen('third-screen').progress_details = self.progress
-            self.screen_mng.get_screen('third-screen').play_details.icon = self.play_pause.icon
-            # self.rotate()
-        elif self.play_pause.icon == 'pause' and not self.playing_state:
+        elif self.is_playing == True and not self.playing_state:
             pygame.mixer.music.pause()
             self.play_pause.icon = 'play-outline'
-            #self.screen_mng.get_screen('third-screen').progress_details = self.progress
-            #self.screen_mng.get_screen('third-screen').play_details.icon = self.play_pause.icon
             self.playing_state = True
             self.progress.stop(widget)
-            self.screen_mng.get_screen('third-screen').play_details.icon = self.play_pause.icon
-            self.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
+            self.img.source = 'transparent.png'
             self.anim.stop(self)
         else:
             pygame.mixer.music.unpause()
             self.play_pause.icon = 'pause'
-            #self.screen_mng.get_screen('third-screen').progress_details = self.progress
-            #print(self.screen_mng.get_screen('third-screen').play_details.icon)
-            #self.screen_mng.get_screen('third-screen').play_details.icon = self.play_pause.icon
-            #print(self.screen_mng.get_screen('third-screen').play_details.icon)
             self.playing_state = False
-            self.screen_mng.get_screen('third-screen').play_details.icon = self.play_pause.icon
             self.progress.start(widget)
             self.anim.start(self)
-            # self.rotate()
 
     def stop_music(self, widget):
         self.widget = widget
@@ -605,7 +551,7 @@ class SongCover(MDBoxLayout):
         self.play_pause.icon = 'play-outline'
         self.is_playing = False
         self.progr.value = 0
-        self.img.source = 'D:\\kivy mobile app\\images\\transparent.png'
+        self.img.source = 'transparent.png'
         self.anim.stop(self)
         # self.rotate()
 
@@ -629,21 +575,9 @@ class MainApp(MDApp):
         self.theme_cls.primary_palette = 'Blue'
         self.theme_cls.theme_style = 'Light'
         sm = ScreenManager()
-        # sm.add_widget(Sounds(name='first-screen'))
-        # sm.add_widget(MusicScreen(name='second-screen'))
-        # sm.add_widget(Sounds(name='first-screen'))
-        # sm.add_widget(MusicScreen(name='second-screen'))
 
         return sm
 
-    # def on_start(self):
-    #     Clock.schedule_once(self.change_screen, 10)  # Delay for 10 seconds
-    #
-    # ########################################################################
-    # ## This function changes the current screen to main screen
-    # ########################################################################
-    # def change_screen(self, dt):
-    #     self.root.current = "first-screen"
 
 
 MainApp().run()

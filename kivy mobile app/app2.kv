@@ -40,9 +40,9 @@
         Image:
             id: img
             source: 'D:\\kivy mobile app\\images\\mic2.gif'
-            allow_stretch: True
+            allow_stretch: False
             anim_delay: 1
-            anim_reset: True
+
     BoxLayout:
         orientation: "vertical"
         size: root.width, root.height
@@ -54,22 +54,8 @@
             font_style: 'H5'
             font_name: 'BadScript'
             theme_text_color: 'Custom'
-            #text_color: (255/255.0, 0/255.0, 0/255.0, 1)
             text_color: (0, 0, 0, 1)
-            #LoaderImage:
-                #source: 'D:\kivy mobile app\images\sounds.jpg'
-                #size_hint: None, None
-                #size: "200dp", "200dp"
 
-
-#    EffectWidget:
-#        effects: [ew.VerticalBlurEffect(size=1), ew.HorizontalBlurEffect(size=1)]
-#        FitImage:
-#            id: cov_img
-#            source: 'listen.gif'
-#            allow_stretch: True
-#            anim_delay: 0.05
-#            #anim_reset: True
     BoxLayout:
         orientation: "vertical"
         #size: root.width, root.height
@@ -80,21 +66,6 @@
             #right_action_items: [["clock", lambda x: app.callback()]]
             font_name: 'VastShadow'
             elevation:10
-
-#        MDLabel:
-#            id: my_label
-#            text: 'Turn ON your mic for listening ...'
-#            source: 'D:\\kivy mobile app\\images\\loader.gif'
-#            halign: 'center'
-#            font_style: 'H5'
-#            font_name: 'BadScript'
-#            theme_text_color: 'Custom'
-#            #text_color: (255/255.0, 0/255.0, 0/255.0, 1)
-#            text_color: (0, 0, 0, 1)
-#            #LoaderImage:
-#                #source: 'D:\kivy mobile app\images\sounds.jpg'
-#                #size_hint: None, None
-#                #size: "200dp", "200dp"
 
         MDNavigationDrawer:
             id: nav_drawer
@@ -261,6 +232,7 @@
 
 
 <SongDetailsScreen>:
+    id: det_screen
     tabs: tabs
     year: year
     duration: duration
@@ -269,11 +241,12 @@
     danceability: danceability
     popularity: popularity
     song: song
-    song_miniplayer: song_miniplayer
+    ds:ds
+    #song_miniplayer: song_miniplayer
     #progress_details: progress_details
     my_lyrics: my_lyrics
     det_img: det_img
-    play_details: play_details
+    #play_details: play_details
     EffectWidget:
         effects: [ew.VerticalBlurEffect(size=10), ew.HorizontalBlurEffect(size=10)]
         FitImage:
@@ -291,11 +264,17 @@
             size_hint_y: .15
             padding: dp(15)
             MDBoxLayout:
-                orientation: "vertical"
+                orientation: "horizontal"
                 MDLabel:
                     id: song
                     text: "Artist - Song Name"
                     font_style: "H6"
+
+
+                MyIcon:
+                    icon: ''
+                    user_font_size: '40dp'
+                    on_press: root.manager.current = 'first-screen'
         MDTabs:
             id: tabs
             Tab:
@@ -309,9 +288,9 @@
                     energy: energy
                     danceability: danceability
                     popularity: popularity
-                    progress_details: progress_details
-                    play_details: play_details
-                    song_miniplayer: song_miniplayer
+                    #progress_details: progress_details
+                    #play_details: play_details
+                    #song_miniplayer: song_miniplayer
                     MDBoxLayout:
                         orientation: "vertical"
                         MDGridLayout:
@@ -354,7 +333,7 @@
                 title: "Lyrics"
                 DetailsScreen:
                     my_lyrics: my_lyrics
-                    progr_details: progress_details
+                    #progr_details: progress_details
                     ScrollView:
                         MDLabel:
                             size_hint_y: None
@@ -372,77 +351,111 @@
             Tab:
                 title: "Genre"
 
-            Tab:
-                title: "Home"
 
+    BoxLayout:
+        canvas:
+            Color:
+                rgba:(*get_color_from_hex('#3498DB')[0:-1], 0.5)
+            Rectangle:
+                pos: self.pos
+                size: self.size
 
-    FloatLayout:
+        orientation: 'vertical'
         size_hint_y: None
-        height: '50dp'
-        AnchorLayout:
-            padding: ('5dp', '5dp', '5dp', '5dp')
+        height: '40dp'
+        Widget:
             size_hint_y: None
-            size: '70dp','60dp'
-            pos: (0,0)
-            BoxLayout:
+            height: '7dp'
+        MDBoxLayout:
+            AnchorLayout:
                 orientation: 'vertical'
-                BoxLayout:
-                    canvas:
-                        Color:
-                            rgba:(*get_color_from_hex('#3f3f3f')[0:-1], 0.9)
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [dp(5), dp(5), dp(5), dp(5)]
-                    BoxLayout:
-                        size_hint_x: None
-                        width: '90dp'
-                        RoundedImage:
-                            source: 'D:\\kivy mobile app\\images\\2.jpg'
-                    Label:
-                        id: song_miniplayer
-                        text: '[b]Artist[/b]\nSong Name'
-#                        Label:
-#                            text: 'Song Name'
-                        markup: True
-                        size_hint_x: None
-                        width: '70dp'
 
-                    Widget:
-                    MDBoxLayout:
-                        AnchorLayout:
-                            MyIcon:
-                                id: play_details
-                                icon: 'play-outline'
-                                on_press: ds.play_music_from_details_screen(progress_details)
-                        AnchorLayout:
-                            MyIcon:
-                                icon: 'music'
-                                on_press: root.manager.current = 'second-screen'
-                        AnchorLayout:
-                            MyIcon:
-                                icon: 'close'
+                MyIcon:
+                    icon: 'home'
+                    icon_size: 70
+                    on_press: root.manager.current = 'first-screen'
 
-                    Widget:
-                MDBoxLayout:
-                    Slider:
-                        id: progress_details
-                        color: [.7, 0, 0, 1]
-                        min: 0
-                        max: 100
-                        value: 0
-                        background_width: '20dp'
-                        cursor_image: ''
-                        cursor_size: ('10dp', '10dp')
-                        value_track_color: [1,0,0,1]
-                        value_track: True
+            AnchorLayout:
+                orientation: 'vertical'
+
+                MyIcon:
+                    icon: 'music'
+                    icon_size: 70
+                    on_press: root.manager.current = 'second-screen'
+
+
+
+
+
+#            Tab:
+#                title: "Home"
+
+
+#    FloatLayout:
+#        size_hint_y: None
+#        height: '50dp'
+#        AnchorLayout:
+#            padding: ('5dp', '5dp', '5dp', '5dp')
+#            size_hint_y: None
+#            size: '70dp','60dp'
+#            pos: (0,0)
+#            BoxLayout:
+#                orientation: 'vertical'
+#                BoxLayout:
+#                    canvas:
+#                        Color:
+#                            rgba:(*get_color_from_hex('#3f3f3f')[0:-1], 0.9)
+#                        RoundedRectangle:
+#                            pos: self.pos
+#                            size: self.size
+#                            radius: [dp(5), dp(5), dp(5), dp(5)]
+#                    BoxLayout:
+#                        size_hint_x: None
+#                        width: '90dp'
+#                        RoundedImage:
+#                            source: 'D:\\kivy mobile app\\images\\2.jpg'
+#                    Label:
+#                        id: song_miniplayer
+#                        text: '[b]Artist[/b]\nSong Name'
+##                        Label:
+##                            text: 'Song Name'
+#                        markup: True
+#                        size_hint_x: None
+#                        width: '70dp'
+#
+#                    Widget:
+#                    MDBoxLayout:
+#                        AnchorLayout:
+#                            MyIcon:
+#                                id: play_details
+#                                icon: 'play-outline'
+#                                on_press: ds.play_music_from_details_screen(progress_details)
+#                        AnchorLayout:
+#                            MyIcon:
+#                                icon: 'music'
+#                                on_press: root.manager.current = 'second-screen'
+#                        AnchorLayout:
+#                            MyIcon:
+#                                icon: 'close'
+#
+#                    Widget:
+#                MDBoxLayout:
+#                    Slider:
+#                        id: progress_details
+#                        color: [.7, 0, 0, 1]
+#                        min: 0
+#                        max: 100
+#                        value: 0
+#                        background_width: '20dp'
+#                        cursor_image: ''
+#                        cursor_size: ('10dp', '10dp')
+#                        value_track_color: [1,0,0,1]
+#                        value_track: True
 
 
 <WelcomeScreen>:
-    # Start the progress bar animation when the screen is active
     on_enter: self.ids.progress.start()
     MDBoxLayout:
-        # Add float layout
         MDFloatLayout:
             # Add Gif image
             Image:
@@ -484,14 +497,14 @@
 
 <ElementCard@MDCard>:
     md_bg_color: 255/255,255/255,255/255,1
-    #size_hint_y: None
+    size_hint_y: None
     padding: dp(15)
     #spacing: dp(15)
     radius: dp(15)
     image: ''
     text: ""
     subtext: ''
-    height: dp(175)
+    height: dp(125)
     orientation: 'vertical'
     Image:
         source: root.image
